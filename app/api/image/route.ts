@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 // import {Configuration, OpenAIApi} from "openai";
-import OpenAI from "openai";
+// import OpenAI from "openai";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 

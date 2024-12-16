@@ -1,72 +1,44 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 // import {Configuration, OpenAIApi} from "openai";
-import OpenAI from "openai";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+// import { GoogleGenerativeAI } from "@google/generative-ai";
+import Replicate from "replicate";
+import { writeFile } from "node:fs/promises";
 
-import {increaseApiLimit, checkApiLimit} from "@/lib/api-limit";
-// const configuration=new Configuration({
-//     apikey: process.env.OPENAI_API_KEY,
+const replicate = new Replicate({
+  auth: process.env.REPLICATE_API_TOKEN
 
-// });
-
-// Initialize Google Gemini API
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || "");
+});
 
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
     const body = await req.json();
-    const { messages } = body;
+    const { prompt } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!process.env.GOOGLE_GEMINI_API_KEY) {
-      return new NextResponse("Google Gemini API Key not configured", { status: 500 });
-    }
-
-    if (!messages) {
-      return new NextResponse("Messages are required", { status: 400 });
-    }
-
-    const freeTrial = await checkApiLimit();
-
-    if (!freeTrial){
-      return new NextResponse("Free trail has expired", {status:403} );
-    }
-    // Extract the last message's content (assuming this is the prompt)
-    const prompt = messages[messages.length - 1]?.content;
-
+  
     if (!prompt) {
       return new NextResponse("Prompt is required", { status: 400 });
     }
 
-    try {
-        
-      const model = await genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const response = await model.generateContent(prompt);
-      console.log(response);
+  //   const input = {
+  //     prompt: "A close-up of a woman's dress fabric fluttering in the gentle ocean breeze, shimmering in the sunlight. Soft, natural light reflecting off the fabric"
+  // };
+  
+  // const response = await replicate.run("haiper-ai/haiper-video-2", { input });
+  
+  
+  // await writeFile("output.mp4", response);
+  // console.log(response)
+  // return NextResponse.json(response)
 
-      // Prepare the AI response
-      const aiMessage = {
-        role: "assistant",
-        content: response.response.text(),
-      };
-      console.log("5");
-      console.log(aiMessage);
-
-      await increaseApiLimit();
-
-      return NextResponse.json(aiMessage);
-
-    } catch (error) {
-      console.error("Google Gemini API Error:", error);
-      return new NextResponse("Error generating content", { status: 500 });
-    }
+    
   } catch (error) {
-    console.error("[CONVERSATION_ERROR]", error);
+    console.error("[VIDEO_ERROR]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }

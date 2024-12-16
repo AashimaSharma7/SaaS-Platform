@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 // import {Configuration, OpenAIApi} from "openai";
 import OpenAI from "openai";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
+import {increaseApiLimit, checkApiLimit} from "@/lib/api-limit";
 
 // const configuration=new Configuration({
 //     apikey: process.env.OPENAI_API_KEY,
@@ -37,6 +37,12 @@ export async function POST(req: Request) {
       return new NextResponse("Messages are required", { status: 400 });
     }
 
+    const freeTrial = await checkApiLimit();
+
+    if (!freeTrial){
+      return new NextResponse("Free trail has expired", {status:403} );
+    }
+
      // Add the instructionMessage to the conversation
      const fullConversation = [
       instructionMessage,
@@ -63,6 +69,8 @@ export async function POST(req: Request) {
       };
       console.log("5");
       console.log(aiMessage);
+
+      await increaseApiLimit();
 
       return NextResponse.json(aiMessage);
 

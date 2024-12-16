@@ -8,6 +8,7 @@ import {Montserrat} from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Code, ImageIcon, LayoutDashboard, MessageSquare, Music, MusicIcon, Settings, VideoIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { FreeCounter } from "@/components/free-counter";
 const montserrat=Montserrat({
     weight: "600", 
     subsets: ["latin"]
@@ -31,15 +32,14 @@ const routes= [
 
     },
     {
-        label: "Image Genaration",
+        label: "Image Recognition",
         icon: ImageIcon,
-        href: "/image",
-        color: "text-pink-700",
-
-
-    },
-    {
-        label: "Video Generation",
+        color:" text-red-300",
+        bgColor: "bg-pink-500/10",
+        href:"/image" 
+      },
+       {
+        label: "Video Generation (pro)",
         icon: VideoIcon,
         href: "/video",
         color: "text-orange-700",
@@ -47,7 +47,16 @@ const routes= [
 
     },
     {
-        label: "Music Generation",
+        label: "Image Genaration (pro)",
+        icon: ImageIcon,
+        href: "/image",
+        color: "text-pink-700",
+
+
+    },
+   
+    {
+        label: "Music Generation (pro)",
         icon: Music,
         href: "/music",
         color: "text-emerald-500",
@@ -73,7 +82,13 @@ const routes= [
     
 ];
 
-const Sidebar = () => {
+interface SidebarProps{
+    apiLimitCount: number;
+};
+
+const Sidebar = ({
+    apiLimitCount=0
+}:SidebarProps ) => {
     const pathname =usePathname();
     return( 
        <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white">
@@ -112,7 +127,9 @@ const Sidebar = () => {
             </div>
 
         </div>
-
+        <FreeCounter
+            apiLimitCount={apiLimitCount}
+        />
        </div>
     );
 }

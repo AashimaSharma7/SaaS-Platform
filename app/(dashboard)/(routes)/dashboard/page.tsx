@@ -14,32 +14,39 @@ const tools =[
     href:"/conversation" 
   },
   {
-    label: "Music Generation",
+    label: "Code Generation",
+    icon: Code,
+    color:" text-green-700",
+    bgColor: "bg-green-700/10",
+    href:"/code" 
+  },
+  {
+    label: "Image Recognition",
+    icon: ImageIcon,
+    color:" text-red-300",
+    bgColor: "bg-pink-500/10",
+    href:"/image" 
+  },
+  {
+    label: "Music Generation (pro)",
     icon: Music,
     color:" text-emerald-500",
     bgColor: "bg-emerald-500/10",
     href:"/music" 
   },
   {
-    label: "Image Generation",
+    label: "Image Generation (pro)",
     icon: ImageIcon,
     color:" text-pink-700",
     bgColor: "bg-pink-500/10",
     href:"/image" 
   },
   {
-    label: "Video Generation",
+    label: "Video Generation (pro)",
     icon: VideoIcon,
     color:" text-orange-700",
     bgColor: "bg-orange-700/10",
     href:"/video" 
-  },
-  {
-    label: "Code Generation",
-    icon: Code,
-    color:" text-green-700",
-    bgColor: "bg-green-700/10",
-    href:"/code" 
   }
 ]
 
