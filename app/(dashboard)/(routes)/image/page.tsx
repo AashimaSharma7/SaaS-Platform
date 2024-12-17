@@ -16,6 +16,7 @@ import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useProModal } from "@/hooks/use-pro-modal";
 // import ChatCompletionMessageParam from "openai"
 
 // type ChatCompletionMessageParam = {
@@ -23,6 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 //     content: string; // The message content
 // };
 const ImagePage=() => {
+    const proModal= useProModal();
     const router = useRouter();
     const [images, setImages]= useState<string[]>([]);
     // const [messages, setMessages]= useState<ChatCompletionMessageParam[]>([]);
@@ -57,8 +59,10 @@ const ImagePage=() => {
             form.reset();
             
         }catch(error :any){
-            // todo: open pro modal
-            console.log(error);
+            if (error?.response?.status===403){
+                proModal.onOpen();
+
+            }
 
         } finally{
             router.refresh();
